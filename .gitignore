@@ -2,14 +2,10 @@
 out/
 *.class
 
-# Artefatos de build do LaTeX (mantemos .tex, .bib, .sty, .bst e as imagens)
-relatorio/template-latex/*.aux
-relatorio/template-latex/*.log
-relatorio/template-latex/*.bbl
-relatorio/template-latex/*.blg
-relatorio/template-latex/*.out
-relatorio/template-latex/*.toc
-relatorio/template-latex/*.synctex.gz
+# Fonte LaTeX e rascunho em Markdown do relatório -- ficam só locais;
+# no repositório entra apenas o PDF final (relatorio/relatorio-grupo9.pdf)
+relatorio/template-latex/
+relatorio/relatorio.md
 
 # Backups de coleta de benchmark (dados brutos ficam fora do repo)
 resultados/*_backup.csv
