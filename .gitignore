@@ -1,0 +1,18 @@
+# Classes compiladas
+out/
+*.class
+
+# Artefatos de build do LaTeX (mantemos .tex, .bib, .sty, .bst e as imagens)
+relatorio/template-latex/*.aux
+relatorio/template-latex/*.log
+relatorio/template-latex/*.bbl
+relatorio/template-latex/*.blg
+relatorio/template-latex/*.out
+relatorio/template-latex/*.toc
+relatorio/template-latex/*.synctex.gz
+
+# Backups de coleta de benchmark (dados brutos ficam fora do repo)
+resultados/*_backup.csv
+
+# SO
+.DS_Store
