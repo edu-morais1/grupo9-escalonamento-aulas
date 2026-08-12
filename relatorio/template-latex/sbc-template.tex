@@ -137,11 +137,15 @@ qualquer ordenação prévia.
 
 Ordena o vetor de aulas por horário de início ($O(n \log n)$) e em seguida
 aplica a \textbf{mesma} função \texttt{alocarSalas} usada pelo Greedy. A
-única diferença entre as duas soluções está, portanto, na ordem em que as
-aulas chegam ao núcleo guloso. Essa combinação de ordenação por início
-seguida de alocação gulosa corresponde exatamente ao algoritmo de
-escalonamento apresentado em aula \cite{brun:26}, cuja função de seleção é
-``selecionar a tarefa com o menor tempo de início''.
+ordenação é feita por um \textbf{Merge Sort implementado manualmente}
+(sem uso de \texttt{Arrays.sort} ou qualquer outra rotina pronta da
+biblioteca padrão), seguindo o pseudocódigo apresentado em aula
+\cite{brun:ordenacao}. A única diferença entre as duas soluções está,
+portanto, na ordem em que as aulas chegam ao núcleo guloso. Essa
+combinação de ordenação por início seguida de alocação gulosa corresponde
+exatamente ao algoritmo de escalonamento apresentado em aula
+\cite{brun:26}, cuja função de seleção é ``selecionar a tarefa com o menor
+tempo de início''.
 
 \section{Análise de Complexidade Assintótica}
 \label{sec:complexidade}
@@ -244,9 +248,8 @@ T_{Greedy}(n) = T_{nucleo}(n) = 2n^2 + 9n + O(1) \in O(n^2)
 O TCGreedy soma ao núcleo o custo da ordenação por horário de início,
 tratada como uma chamada de função de complexidade conhecida (assim como
 funções puras vistas em aula, ex. $raiz(n)$, $potencia(base,expoente)$).
-O método \texttt{Arrays.sort} usado para ordenar um vetor de objetos
-(como \texttt{Aula[]}) implementa uma variante estável de \textit{merge
-sort} (TimSort), cujo número de comparações no pior caso é
+A ordenação é feita por um \textbf{Merge Sort implementado manualmente}
+\cite{brun:ordenacao}, cujo número de comparações no pior caso é
 $T_{sort}(n) = n\log_2 n$. Logo:
 
 \begin{equation}
@@ -305,8 +308,8 @@ estratégia:
   evitar que uma entrada muito grande trave o benchmark indefinidamente.
   A coleta final apresentada neste relatório foi feita com esse orçamento
   \textbf{desligado}, para obter tempos reais mesmo nos tamanhos maiores
-  -- o maior tempo médio observado foi o do Greedy em $n=1.000.000$,
-  $\sim$121,1s por execução.
+  -- o maior tempo médio observado foi o do TCGreedy em $n=1.000.000$,
+  $\sim$254,1s por execução.
 \end{enumerate}
 
 Os dados brutos estão disponíveis em \texttt{resultados/tempos.csv}, no
@@ -346,20 +349,20 @@ valores medidos para tamanhos representativos.
 \multirow{2}{*}{$n$} & \multicolumn{2}{c|}{Tempo médio (ms)} & \multicolumn{2}{c}{Salas usadas} \\
  & Greedy & TCGreedy & Greedy & TCGreedy \\
 \hline
-10      & 0,007      & 0,017      & 7       & 7       \\
-100     & 0,190      & 0,238      & 62      & 53      \\
-1.000   & 0,110      & 0,396      & 531     & 481     \\
-10.000  & 7,373      & 16,222     & 4.576   & 4.405   \\
-20.000  & 26,452     & 35,551     & 9.703   & 9.606   \\
-30.000  & 65,945     & 65,458     & 13.234  & 12.864  \\
-50.000  & 194,644    & 188,233    & 25.313  & 25.090  \\
-100.000 & 770,891    & 727,892    & 50.402  & 49.979  \\
-150.000 & 1.905,461  & 1.681,344  & 75.314  & 74.868  \\
-250.000 & 4.934,210  & 4.551,336  & 125.691 & 124.877 \\
-350.000 & 10.156,943 & 9.018,185  & 175.876 & 175.219 \\
-500.000 & 21.163,517 & 21.774,828 & 251.179 & 250.175 \\
-750.000 & 50.509,619 & 44.313,597 & 376.653 & 375.352 \\
-1.000.000 & 121.092,902 & 93.954,894 & 642.836 & 642.819 \\
+10      & 0,005      & 0,013      & 7       & 7       \\
+100     & 0,152      & 0,131      & 62      & 53      \\
+1.000   & 1,022      & 0,549      & 531     & 481     \\
+10.000  & 8,815      & 10,261     & 4.576   & 4.405   \\
+20.000  & 34,031     & 40,111     & 9.703   & 9.606   \\
+30.000  & 77,003     & 86,238     & 13.234  & 12.864  \\
+50.000  & 242,607    & 222,627    & 25.313  & 25.090  \\
+100.000 & 992,870    & 934,108    & 50.402  & 49.979  \\
+150.000 & 2.369,912  & 2.053,197  & 75.314  & 74.868  \\
+250.000 & 6.550,870  & 5.881,208  & 125.691 & 124.877 \\
+350.000 & 12.675,201 & 10.307,271 & 175.876 & 175.219 \\
+500.000 & 23.390,475 & 25.089,856 & 251.179 & 250.175 \\
+750.000 & 65.830,729 & 57.756,689 & 376.653 & 375.352 \\
+1.000.000 & 149.628,121 & 254.117,516 & 642.836 & 642.819 \\
 \hline
 \end{tabular}
 \end{table}
@@ -380,20 +383,28 @@ Principais observações:
   encontrar salas livres mais cedo, em média, e evita alocações
   desnecessárias;
 \item \textbf{Ponto de cruzamento no tempo de parede:} para $n$ pequeno
-  (até $\sim$20.000), o Greedy é mais rápido em tempo de parede, pois o
-  custo constante do \texttt{Arrays.sort} supera a economia de operações
-  do núcleo (ex.: $n=20.000 \rightarrow$ Greedy 26,5ms vs TCGreedy
-  35,6ms). A partir de $n\approx$30.000, esse quadro se inverte -- o
-  TCGreedy passa a ser mais rápido na maioria dos tamanhos maiores (ex.:
-  $n=30.000 \rightarrow$ Greedy 65,9ms vs TCGreedy 65,5ms; $n=1.000.000
-  \rightarrow$ Greedy 121.092,9ms vs TCGreedy 93.954,9ms), pois o custo
-  $O(n \log n)$ do \textit{sort} passa a ser irrelevante frente à
-  economia de operações $O(n^2)$ do núcleo. Há uma inversão pontual em
-  $n=500.000$ (Greedy 21.163,5ms vs TCGreedy 21.774,8ms), provavelmente
-  causada por ruído de medição (pausas de \textit{garbage collector} ou
-  variação de carga do sistema) e não por uma mudança real de
-  comportamento algorítmico, já que a tendência volta a favorecer o
-  TCGreedy nos dois tamanhos seguintes.
+  (até $\sim$30.000), o Greedy é mais rápido em tempo de parede na maior
+  parte dos tamanhos, pois o custo constante do Merge Sort supera a
+  economia de operações do núcleo (ex.: $n=30.000 \rightarrow$ Greedy
+  77,0ms vs TCGreedy 86,2ms). A partir de $n\approx$50.000, esse quadro se
+  inverte -- o TCGreedy passa a ser mais rápido na maior parte dos
+  tamanhos intermediários (ex.: $n=50.000 \rightarrow$ Greedy 242,6ms vs
+  TCGreedy 222,6ms; $n=350.000 \rightarrow$ Greedy 12.675,2ms vs TCGreedy
+  10.307,3ms), com uma inversão pontual em $n=500.000$ (Greedy 23.390,5ms
+  vs TCGreedy 25.089,9ms), atribuída a ruído de medição, já que a
+  tendência volta a favorecer o TCGreedy no tamanho seguinte
+  ($n=750.000$). \textbf{Na maior entrada testada, porém, o quadro se
+  inverte de novo, de forma acentuada:} em $n=1.000.000$, o Greedy volta
+  a ser bem mais rápido que o TCGreedy (149.628,1ms vs 254.117,5ms -- o
+  TCGreedy fica quase 70\% mais lento). Essa inversão não é ruído: ao
+  contrário do \texttt{Arrays.sort} da JDK (TimSort), que reutiliza
+  memória de forma otimizada, nossa implementação manual do Merge Sort
+  aloca dois vetores auxiliares novos a cada chamada recursiva de
+  \texttt{merge}. Em $n=1.000.000$ isso significa uma quantidade muito
+  grande de alocações de memória de curta duração, o que aumenta a
+  pressão sobre o coletor de lixo da JVM -- um custo de constante de
+  implementação que passa a pesar mais do que a economia teórica de
+  operações do núcleo justamente na maior entrada testada.
 \end{itemize}
 
 \section{Análise Crítica}
@@ -419,7 +430,12 @@ mesmo sem mudar a classe assintótica de pior caso:
 \item Ele \textbf{adiciona um custo fixo} (o \textit{sort} em si), que só
   compensa a partir de um tamanho de entrada onde a economia de operações
   do núcleo supera esse custo -- daí o ponto de cruzamento observado por
-  volta de $n\approx$20.000--30.000.
+  volta de $n\approx$50.000. Esse custo fixo, porém, não é só o
+  $O(n\log n)$ teórico: como o Merge Sort foi implementado manualmente
+  (sem otimizações de biblioteca), ele também carrega um custo de
+  alocação de memória por chamada recursiva que só se torna dominante na
+  maior entrada testada ($n=1.000.000$), revertendo a vantagem do
+  TCGreedy justamente onde ela havia sido mais consistente.
 \end{itemize}
 
 A melhora na qualidade da solução (item anterior) não é uma coincidência
@@ -447,10 +463,15 @@ médio/prático -- e o ganho só se manifesta quando a etapa de
 crescente de início, mesmo sem ter sido redesenhado para isso).
 
 Os tempos observados em $n=1.000.000$ (a maior entrada testada -- Greedy
-121,09s, TCGreedy 93,95s por execução) reforçam, na prática, por que
+149,63s, TCGreedy 254,12s por execução) reforçam, na prática, por que
 algoritmos $O(n^2)$ \cite{cormen:09} são considerados proibitivos para
-entradas grandes: cada execução isolada já leva mais de um minuto, mesmo
-em um processador moderno.
+entradas grandes: mesmo a execução mais rápida (Greedy, nesse tamanho) já
+leva quase dois minutos e meio, mesmo em um processador moderno. A
+diferença entre as duas soluções nesse ponto específico é dominada por um
+fator de implementação (as alocações de memória do Merge Sort manual) e
+não pela ordem de grandeza compartilhada por ambas -- um lembrete de que
+constantes de implementação podem superar, na prática, ganhos que só
+existem em teoria.
 
 \section{Conclusão}
 
@@ -459,17 +480,24 @@ núcleo de alocação e por isso tenham a mesma classe assintótica de pior
 caso ($O(n^2)$), a etapa de pré-ordenação do TCGreedy tem impacto prático
 real: reduz o número de operações do núcleo e iguala ou reduz o número de
 salas usadas em todos os tamanhos testados, e passa a compensar seu
-próprio custo (o \textit{sort}) a partir de $n\approx$20.000--30.000,
-tornando-se a solução mais rápida em tempo de parede na maior parte dos
-tamanhos maiores testados (com uma única inversão pontual em
-$n=500.000$, provavelmente ruído de medição). Isso confirma que o valor
-do paradigma Transformar para Conquistar não está necessariamente em
-mudar a ordem de complexidade assintótica, mas em explorar uma estrutura
-na entrada (aqui, a ordem cronológica das aulas) que barateia o
-comportamento médio do algoritmo que vem em seguida. Os tempos crescentes
-nas entradas maiores testadas (chegando a mais de um minuto por execução
-em $n=1.000.000$) também evidenciaram, de forma concreta, por que
-algoritmos $O(n^2)$ se tornam inviáveis à medida que $n$ cresce.
+próprio custo (o \textit{sort}) a partir de $n\approx$50.000, tornando-se
+a solução mais rápida em tempo de parede na maior parte dos tamanhos
+intermediários testados (com uma única inversão pontual em $n=500.000$,
+provavelmente ruído de medição). Isso confirma que o valor do paradigma
+Transformar para Conquistar não está necessariamente em mudar a ordem de
+complexidade assintótica, mas em explorar uma estrutura na entrada (aqui,
+a ordem cronológica das aulas) que barateia o comportamento médio do
+algoritmo que vem em seguida. Por outro lado, na maior entrada testada
+($n=1.000.000$) essa vantagem se reverte de forma acentuada -- o Greedy
+volta a ser bem mais rápido --, o que evidencia que a etapa de
+``Transformar'' também carrega seus próprios custos de implementação (no
+caso do Merge Sort manual, a alocação repetida de vetores auxiliares a
+cada chamada recursiva), que podem passar a dominar em escalas grandes o
+suficiente, independentemente do que a análise assintótica de pior caso
+prevê. Os tempos crescentes nas entradas maiores testadas (chegando a
+mais de dois minutos por execução em $n=1.000.000$) também evidenciaram,
+de forma concreta, por que algoritmos $O(n^2)$ se tornam inviáveis à
+medida que $n$ cresce.
 
 \section{Código-fonte}
 
