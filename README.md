@@ -31,7 +31,7 @@ linha e resultados experimentais) está em
 src/            código-fonte Java
 scripts/        automação do benchmark e geração de gráficos
 resultados/     CSV com os tempos medidos e os gráficos gerados
-relatorio/      relatório em PDF, fonte LaTeX (SBC) e rascunho em Markdown
+relatorio/      relatório final em PDF
 ```
 
 ## Como compilar e rodar
