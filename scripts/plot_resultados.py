@@ -57,20 +57,20 @@ def main():
     dados = ler_csv(csv_entrada)
     plotar(
         dados, pasta_saida / "tamanho_vs_tempo_linear.png",
-        "tempo_ms", "Tempo medio de execucao (ms)",
+        "tempo_ms", "Tempo médio de execução (ms)",
         "Tamanho vs Tempo -- Escalonamento de Aulas (Greedy vs TCGreedy)",
         escala_log=False,
     )
     plotar(
         dados, pasta_saida / "tamanho_vs_tempo_log_log.png",
-        "tempo_ms", "Tempo medio de execucao (ms)",
+        "tempo_ms", "Tempo médio de execução (ms)",
         "Tamanho vs Tempo -- Escalonamento de Aulas (Greedy vs TCGreedy)",
         escala_log=True,
     )
     plotar(
         dados, pasta_saida / "tamanho_vs_operacoes_log_log.png",
-        "operacoes", "Operacoes medias do nucleo (comparacoes)",
-        "Tamanho vs Operacoes do Nucleo -- Escalonamento de Aulas (Greedy vs TCGreedy)",
+        "operacoes", "Operações médias do núcleo (comparações)",
+        "Tamanho vs Operações do Núcleo -- Escalonamento de Aulas (Greedy vs TCGreedy)",
         escala_log=True,
     )
 
