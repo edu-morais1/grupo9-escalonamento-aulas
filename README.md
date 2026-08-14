@@ -3,8 +3,8 @@
 Trabalho da disciplina de Projeto e Análise de Algoritmos (Csc2152, UNIOESTE,
 2026) — **Grupo 9**.
 
-**Autores:** Gabriel Jared de Barros Amorim, Jonathan Santos Tadei, Lucas
-Ivanov Costa, Vinicius Eduardo Morais Oliveira.
+**Autores:** Gabriel Jared de Barros Amorim, Lucas Ivanov Costa, Vinicius
+Eduardo Morais Oliveira.
 
 ## O problema
 
